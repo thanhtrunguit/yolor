@@ -146,9 +146,7 @@ def build_targets(p, targets, model):
             j = torch.max(r, 1. / r).max(2)[0] < model.hyp['anchor_t']  # compare
             # j = wh_iou(anchors, t[:, 4:6]) > model.hyp['iou_t']  # iou(3,n) = wh_iou(anchors(3,2), gwh(n,2))
             at = anchors[i]  # CPU by default
-            at = at.to(targets.device)  # <— move to same device as targets
-            t = targets[t_mask]  # on CUDA
-            a, t = at[j], t.repeat(na, 1, 1)[j]
+            a, t = at[j], t.repeat(na, 1, 1)[j]  # filter
 
             # overlaps
             gxy = t[:, 2:4]  # grid xy
