@@ -34,6 +34,8 @@ from utils.plots import plot_images, plot_labels, plot_results, plot_evolution
 from utils.torch_utils import ModelEMA, select_device, intersect_dicts, torch_distributed_zero_first
 
 import torch
+np.int = int  # restore the deprecated alias
+
 
 # === Begin monkey-patch to restore old torch.load behavior ===
 _original_torch_load = torch.load
