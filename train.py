@@ -33,6 +33,18 @@ from utils.loss import compute_loss
 from utils.plots import plot_images, plot_labels, plot_results, plot_evolution
 from utils.torch_utils import ModelEMA, select_device, intersect_dicts, torch_distributed_zero_first
 
+import torch
+
+# === Begin monkey-patch to restore old torch.load behavior ===
+_original_torch_load = torch.load
+def _patched_torch_load(*args, **kwargs):
+    # If the caller didn’t explicitly opt into weights_only, fall back to False
+    kwargs.setdefault('weights_only', False)
+    return _original_torch_load(*args, **kwargs)
+torch.load = _patched_torch_load
+# === End monkey-patch ===
+
+
 logger = logging.getLogger(__name__)
 
 try:
